@@ -1,0 +1,73 @@
+@page "/usuarios/editar/{id:int}"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@using Dtos.User
+
+<PageTitle>Editar Usuario</PageTitle>
+
+<h3 class="text-2xl font-bold text-teal-600">Editar Usuario</h3>
+
+<EditForm Model="@User" OnValidSubmit="@EditarUser">
+
+      @* Nome *@
+    <label class="block mt-4">
+        <span class="text-gray-600">Nome</span>
+        <InputText @bind-Value="User.Name" class="myif-form-input" />
+    </label>
+
+     <label class="block mt-4">
+        <span class="text-gray-600">E-mail</span>
+         <InputText @bind-Value="User.Email" class="myif-form-input" />
+    </label>
+    <label class="block mt-4">
+        <span class="text-gray-600">Telefone</span>
+         <InputText @bind-Value="User.Phone" class="myif-form-input" />
+    </label>
+ <label class="block mt-4">
+        <span class="text-gray-600">Senha</span>
+         <InputText @bind-Value="User.Password" class="myif-form-input" />
+    </label>
+   <label class="block mt-4">
+        <span class="text-gray-600">Endereço</span>
+         <InputText @bind-Value="User.Adress" class="myif-form-input" />
+    </label>
+    <label class="block mt-4">
+        <span class="text-gray-600">Tipo de Usuario</span>
+         <InputText @bind-Value="User.Type" class="myif-form-input" />
+    </label>
+    @* Nesse componente vao ser exibidas todas as mensagens de erro *@
+    <div class="text-red-500 my-2">
+        <ValidationSummary />
+    </div>
+
+    <button class="myif-button-submit">Salvar</button>
+
+    @* Dizendo que quero validar meus dados usando anotações *@
+    <DataAnnotationsValidator />
+
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    @* Objeto que vai guardar os dados do curso que vou editar *@
+    public UserCreateUpdateDto User { get; set; } = new();
+
+    @* Fazer requisicao pra pegar os dados do User *@
+    protected override async Task OnInitializedAsync()
+    {
+        User = await Http.GetFromJsonAsync<UserCreateUpdateDto>($"/usuarios/{Id}");
+    }
+
+    @* Metodo que vai fazer requisicao assincrona do tipo PUT para atualizar o curso *@
+    private async Task EditarUser()
+    {
+        @* Requisicao do tipo PUT passando o curso para atualizar *@
+        await Http.PutAsJsonAsync($"/usuarios/{Id}", User);
+
+        @* Navegar de novo pra lista de cursos *@
+        Navigation.NavigateTo("/usuarios");
+    }
+}

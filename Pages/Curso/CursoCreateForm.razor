@@ -1,0 +1,65 @@
+@page "/usuarios/criar"
+@using Dtos.User
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Adicionar Usuários</PageTitle>
+
+<h3 class="text-2xl font-bold text-teal-600">Adicionar Usuário</h3>
+
+<EditForm Model="@User" OnValidSubmit="@CriarUser">
+
+    @* Nome *@
+    <label class="block mt-4">
+        <span class="text-gray-600">Nome</span>
+        <InputText @bind-Value="User.Name" class="myif-form-input" />
+    </label>
+
+     <label class="block mt-4">
+        <span class="text-gray-600">E-mail</span>
+         <InputText @bind-Value="User.Email" class="myif-form-input" />
+    </label>
+    <label class="block mt-4">
+        <span class="text-gray-600">Telefone</span>
+         <InputText @bind-Value="User.Phone" class="myif-form-input" />
+    </label>
+ <label class="block mt-4">
+        <span class="text-gray-600">Senha</span>
+         <InputText @bind-Value="User.Password" class="myif-form-input" />
+    </label>
+   <label class="block mt-4">
+        <span class="text-gray-600">Endereço</span>
+         <InputText @bind-Value="User.Adress" class="myif-form-input" />
+    </label>
+    <label class="block mt-4">
+        <span class="text-gray-600">Tipo de Usuario</span>
+         <InputText @bind-Value="User.Type" class="myif-form-input" />
+    </label>
+
+    @* Nesse componente vao ser exibidas todas as mensagens de erro *@
+    <div class="text-red-500 my-2">
+        <ValidationSummary />
+    </div>
+
+    <button class="myif-button-submit">Salvar</button>
+
+    @* Dizendo que quero validar meus dados usando anotações *@
+    <DataAnnotationsValidator />
+
+</EditForm>
+
+@code
+{
+    @* Objeto que guarda os dados do formularios *@
+    public UserCreateUpdateDto User { get; set; } = new();
+
+    @* Método que vai ser chamado para enviar o User pra salvar na API *@
+    private async Task CriarUser()
+    {
+        @* Fazendo a requisicao POST pra salvar o curso na API *@
+        await Http.PostAsJsonAsync("/usuarios", User);
+
+        @* Navegar pra lista de cursos *@
+        Navigation.NavigateTo("/usuarios");
+    }
+}

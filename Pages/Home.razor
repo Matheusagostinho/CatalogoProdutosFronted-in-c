@@ -1,0 +1,16 @@
+@page "/"
+@inject NavigationManager Navigation
+
+@* Se eu quisesse poderia ter algo visual na tela *@
+@* Nesse exemplo vou apenas redirecionar pra outra tela *@
+
+@code
+{
+    @* versao sincrona do OnInitialized *@
+    @* Vai ser executado na primeira vez que a página for carregada *@
+    protected override void OnInitialized()
+    {
+        @* Vou mandar navegar para outra página *@
+        Navigation.NavigateTo("/usuarios");
+    }
+}
